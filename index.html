@@ -690,6 +690,11 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
 </style>
 </head>
 <body>
+<form name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="enquiry">
+  <input name="bot-field"><input name="subject"><input name="name"><input name="email"><textarea name="message"></textarea>
+</form>
+
 <div id="preloader" aria-hidden="true"><div class="pl-logo"><img class="base" src="images/brand/logo.png" alt=""><img class="fill" src="images/brand/logo.png" alt=""></div></div>
 <script>
 /* Preloader: runs on its own, so nothing later in the page can leave it stuck.
@@ -2241,14 +2246,13 @@ const send = (via, subject, msg, fields, form, btn, thanks) => {
   const label = btn && btn.textContent;
   if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
   say('ok', 'Sending your request... this can take up to a minute, please wait.');
-  /* The full guest details and message go straight to SITE.email (no mail app needed). */
-  const body = { ...fields, Source: SITE.brand, _subject: SITE.brand + ': ' + subject, _replyto: fields.Email, _template: 'table', _captcha: 'false', _honey: '' };
-  if (SITE.emailCopy) body._cc = SITE.emailCopy;
+  /* Sent with Netlify Forms (see the hidden form named "enquiry" near the top of <body>). */
+  const params = new URLSearchParams({ 'form-name': 'enquiry', 'bot-field': '', subject: SITE.brand + ': ' + subject, name: fields['Guest name'] || fields.Name || '', email: fields.Email || '', message: msg });
   const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 45000);
-  fetch('https://formsubmit.co/ajax/' + encodeURIComponent(SITE.email), {
-    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body), signal: ctrl.signal
-  }).then(r => r.json().catch(() => ({ success: r.ok }))).then(r => {
-    if (r.success === false || r.success === 'false') throw new Error(r.message || 'failed');
+  fetch('/', {
+    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString(), signal: ctrl.signal
+  }).then(r => {
+    if (!r.ok) throw new Error('Server answered ' + r.status);
     say('ok', thanks || 'Thank you! Your request has been sent to Crystal Holidays. We will reply to ' + (fields.Email || 'you') + ' within one working day.');
     form.reset();
   }).catch(err => {
