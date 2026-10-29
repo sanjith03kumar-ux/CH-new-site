@@ -690,10 +690,6 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
 </style>
 </head>
 <body>
-<form name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input type="hidden" name="form-name" value="enquiry">
-  <input name="bot-field"><input name="subject"><input name="name"><input name="email"><textarea name="message"></textarea>
-</form>
 
 <div id="preloader" aria-hidden="true"><div class="pl-logo"><img class="base" src="images/brand/logo.png" alt=""><img class="fill" src="images/brand/logo.png" alt=""></div></div>
 <script>
@@ -959,7 +955,7 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
    - itinerary lines look like "Day 1: Arrive in Colombo"
    - published:false hides an item; featured is not used in this single page
    ===================================================================== */
-const SITE = { whatsapp: '94777356354', email: 'crystalh@sltnet.lk', emailCopy: '', depositPercent: 30, brand: 'Crystal Holiday Web',
+const SITE = { web3key: 'c1a337ac-e8d1-4841-a604-a72c09355552', whatsapp: '94777356354', email: 'crystalh@sltnet.lk', emailCopy: '', depositPercent: 30, brand: 'Crystal Holiday Web',
   /* LANKAPAY / LANKAQR PAYMENTS: fill in your own details.
      qrImage: your LankaQR code picture (save it as images/brand/lankaqr.png) so guests can scan it with any Sri Lankan bank app or LankaPay app
      bank: your account details, shown under the QR for bank transfers
@@ -2246,13 +2242,14 @@ const send = (via, subject, msg, fields, form, btn, thanks) => {
   const label = btn && btn.textContent;
   if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
   say('ok', 'Sending your request... this can take up to a minute, please wait.');
-  /* Sent with Netlify Forms (see the hidden form named "enquiry" near the top of <body>). */
-  const params = new URLSearchParams({ 'form-name': 'enquiry', 'bot-field': '', subject: SITE.brand + ': ' + subject, name: fields['Guest name'] || fields.Name || '', email: fields.Email || '', message: msg });
+  /* Sent with Web3Forms: the details are emailed to the address linked to SITE.web3key. */
+  if (!SITE.web3key || /PASTE/.test(SITE.web3key)) { say('err', 'Online sending is not set up yet. Opening your email app with the details filled in...'); setTimeout(mailto, 1200); if (btn) { btn.disabled = false; btn.textContent = label; } return; }
+  const payload = { access_key: SITE.web3key, subject: SITE.brand + ': ' + subject, from_name: SITE.brand, name: fields['Guest name'] || fields.Name || '', email: fields.Email || '', message: msg, botcheck: '' };
   const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 45000);
-  fetch('/', {
-    method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params.toString(), signal: ctrl.signal
-  }).then(r => {
-    if (!r.ok) throw new Error('Server answered ' + r.status);
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(payload), signal: ctrl.signal
+  }).then(r => r.json().catch(() => ({ success: r.ok }))).then(r => {
+    if (!r.success) throw new Error(r.message || 'failed');
     say('ok', thanks || 'Thank you! Your request has been sent to Crystal Holidays. We will reply to ' + (fields.Email || 'you') + ' within one working day.');
     form.reset();
   }).catch(err => {
@@ -2260,7 +2257,6 @@ const send = (via, subject, msg, fields, form, btn, thanks) => {
     const m = String(err && err.message || err), slow = err && err.name === 'AbortError';
     const why = location.protocol === 'file:' ? ' (This page was opened from a file on a computer. Online sending only works from the live website address.)'
       : slow ? ' (The email service is taking too long to answer, so your request may or may not have arrived.)'
-      : /activat/i.test(m) ? ' (Reason: the email form on crystalh@sltnet.lk still has to be activated. Check that inbox, and spam, for the ' + SITE.brand + ' activation email and click Activate Form.)'
       : m && m !== 'failed' && m !== 'Failed to fetch' ? ' (Reason: ' + m + ')' : '';
     say('err', 'We could not send it from this page.' + why + ' Opening your email app with the details filled in...');
     setTimeout(mailto, why ? 6000 : 1200);
