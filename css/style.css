@@ -161,6 +161,8 @@ a.card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .split .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .split .photos img { border-radius: var(--r); width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 5; }
 .split .photos img:nth-child(2) { margin-top: 36px; }
+#about .split { align-items: start; }
+#about .photos img:nth-child(2) { margin-top: 0; }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; gap: 30px; } .split.flip > :first-child { order: 0; } }
 .facts { display: grid; gap: 12px; margin: 22px 0 0; padding: 0; list-style: none; }
 .facts li { padding-left: 30px; position: relative; }
