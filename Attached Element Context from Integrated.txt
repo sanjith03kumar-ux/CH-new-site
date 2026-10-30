@@ -1,0 +1,47 @@
+Attached Element Context from Integrated Browser
+
+Element: section#ways
+
+URL: http://127.0.0.1:3000/c:/Users/SSTECH/Desktop/CH%20new%20site/index.html?vscode-livepreview=true
+
+HTML Path: main#top > section#ways
+
+Outer HTML:
+```html
+<section id="ways"><div class="wrap">
+  <div class="sec-head rv rv-up vis in" style="--k: 16s; --d: 0ms;"><h2>Four ways to see Sri Lanka</h2><p>Pick the side of the island that pulls you. Every journey can be mixed and reshaped.</p></div>
+  <div class="arches" id="arches"><a class="arch rv rv-arch vis in" href="#tours" data-theme="beach" style="--k: 20s; --d: 110ms;"><img loading="lazy" src="images/tours/palm-beach.jpg" alt=""><div><h3>Beach &amp; Coast</h3><p>Palm-lined bays, surf, whales and quiet east-coast sand.</p></div></a><a class="arch rv rv-arch vis in" href="#tours" data-theme="sky" style="--k: 12s; --d: 220ms;"><img loading="lazy" src="images/tours/hill-sunset.jpg" alt=""><div><h3>Hills &amp; Sky</h3><p>Tea country, mountain trails, sunrise climbs and views from above.</p></div></a><a class="arch rv rv-arch vis in" href="#tours" data-theme="wildlife" style="--k: 14s; --d: 330ms;"><img loading="lazy" src="images/tours/wild-elephant.jpg" alt=""><div><h3>Wildlife</h3><p>Elephants, leopards, rainforest birds and turtle beaches.</p></div></a><a class="arch rv rv-arch vis in" href="#tours" data-theme="wellness" style="--k: 16s; --d: 440ms;"><img loading="lazy" src="images/tours/ayurveda-massage.jpg" alt=""><div><h3>Ayurveda &amp; Wellness</h3><p>Doctor-guided treatments, yoga and slow days by the sea.</p></div></a></div>
+</div></section>
+```
+
+Dimensions:
+- top: 244px
+- left: 0px
+- width: 1128px
+- height: 722px
+
+CSS:
+```css
+*, *::before, *::after { box-sizing: border-box; }
+section { padding: 84px 0; }
+section { overflow-x: clip; }
+section[id], #contact { scroll-margin-top: 96px; }
+
+/* Inherited */
+body { font: 17px/1.65 var(--body); color: var(--ink) }
+
+/* Resolved values */
+padding: 84px 0px;
+box-sizing: border-box;
+color: rgb(10, 37, 64);
+display: block;
+height: 722.438px;
+overflow-x: clip;
+scroll-margin-top: 96px;
+unicode-bidi: isolate /*UA*/;
+width: 1128px;
+
+/* CSS variables */
+--body: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+--ink: #0a2540;
+```
