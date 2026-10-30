@@ -59,7 +59,7 @@ p { margin: 0 0 1em; }
 
 /* ---------- header ---------- */
 .site-header { position: fixed; inset: 0 0 auto 0; z-index: 100; transition: background .3s, box-shadow .3s; color: #fff; }
-.site-header.solid, .site-header.open { background: rgba(255, 255, 255, .96); backdrop-filter: blur(10px); box-shadow: 0 1px 0 var(--line); color: var(--ink); }
+.site-header.solid, .site-header.open { background: rgba(243, 249, 252, .78); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); border-bottom: 1px solid rgba(255, 255, 255, .55); box-shadow: 0 8px 24px rgba(10, 37, 64, .1); color: var(--ink); }
 .hd { display: flex; align-items: center; gap: 22px; height: 76px; }
 .brand img { height: 62px; width: auto; }
 .brand .dark-logo { display: none; }
