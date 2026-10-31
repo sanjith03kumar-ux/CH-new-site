@@ -750,6 +750,20 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
 .es{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px}
 .es h3{margin-bottom:.4em}.es p{margin:0;color:var(--muted);font-size:.97rem}
 @media(max-width:700px){.bt-grid{grid-template-columns:repeat(6,1fr)}.bt-row{grid-template-columns:1fr}}
+
+/* Scenic section backgrounds */
+#ways, #sports, #giving { background: linear-gradient(rgba(243,249,252,.8), rgba(243,249,252,.8)), url('images/sections/hill-country.png') center / cover fixed no-repeat; }
+#tours { background: linear-gradient(rgba(243,249,252,.84), rgba(243,249,252,.84)), url('images/sections/sigiriya-rock.png') center / cover fixed no-repeat; }
+#wellness { background: linear-gradient(rgba(10,37,64,.62), rgba(10,37,64,.62)), url('images/sections/monkey.png') center / cover fixed no-repeat; }
+#stay, #guests { background: linear-gradient(rgba(243,249,252,.8), rgba(243,249,252,.8)), url('images/sections/tuk-tuk-travel.png') center / cover fixed no-repeat; }
+#maldives { background: linear-gradient(rgba(243,249,252,.8), rgba(243,249,252,.8)), url('images/sections/galle-lighthouse.png') center / cover fixed no-repeat; }
+#excursions { background: linear-gradient(rgba(243,249,252,.8), rgba(243,249,252,.8)), url('images/sections/polonnaruwa-ruins.png') center / cover fixed no-repeat; }
+#best-time, #essentials { background: linear-gradient(rgba(243,249,252,.82), rgba(243,249,252,.82)), url('images/sections/sigiriya-sunset.png') center / cover fixed no-repeat; }
+#rating { background: linear-gradient(rgba(243,249,252,.8), rgba(243,249,252,.8)), url('images/sections/sigiriya-landscape.png') center / cover fixed no-repeat; }
+#rate-us { background: linear-gradient(rgba(243,249,252,.82), rgba(243,249,252,.82)), url('images/sections/elephants.png') center / cover fixed no-repeat; }
+@media(max-width:700px){
+  #ways, #tours, #wellness, #stay, #maldives, #excursions, #sports, #best-time, #rating, #guests, #rate-us, #giving, #essentials { background-attachment: scroll; }
+}
 </style>
 </head>
 <body>
@@ -2237,11 +2251,11 @@ $$('[data-mal]').forEach(a => a.addEventListener('click', () => setMal(a.dataset
 const ACTIVITIES = [
   { t: 'Trekking & hiking', i: '\ud83e\udd7e', img: 'images/tours/hill-sunset.jpg', d: 'Sunrise climbs, tea-estate trails and Knuckles and Horton Plains walks with an expert guide.' },
   { t: 'Wildlife safari', i: '\ud83d\udc18', img: 'images/tours/wild-elephant.jpg', d: 'Jeep safaris in Yala, Udawalawe and Minneriya for leopards, elephants and birds.' },
-  { t: 'Whitewater rafting', i: '\ud83d\udef6', img: 'images/gallery/lake-boats.jpg', d: 'Kelani River rapids and calm-water paddles, with safety gear and trained crews.' },
-  { t: 'Surfing', i: '\ud83c\udfc4', img: 'images/tours/palm-beach.jpg', d: 'Lessons and board hire at Weligama, Arugam Bay and Hikkaduwa, for every level.' },
-  { t: 'Snorkelling & diving', i: '\ud83e\udd3f', img: 'images/tours/palm-swing.jpg', d: 'Coral reefs, shipwrecks and turtle bays, with certified instructors.' },
-  { t: 'Whale & dolphin watching', i: '\ud83d\udc0b', img: 'images/tours/stilt-fishermen.jpg', d: 'Blue whale season boat trips from Mirissa and Trincomalee.' },
-  { t: 'Hot air ballooning', i: '\ud83c\udf88', img: 'images/tours/helicopter.jpg', d: 'Float over Sigiriya and Dambulla at sunrise, a quiet way to see the island.' },
+  { t: 'Whitewater rafting', i: '\ud83d\udef6', img: 'https://cdn.kimkim.com/files/a/content_articles/featured_photos/bc6972a23c5f86a2ed7c9a609cde350ed2707639/big-3f1c11516c7d483ff5d663c85d435c37.jpg', d: 'Kelani River rapids and calm-water paddles, with safety gear and trained crews.' },
+  { t: 'Surfing', i: '\ud83c\udfc4', img: 'https://vasatrainer.com/wp-content/uploads/2025/04/surfer-in-wave.png', d: 'Lessons and board hire at Weligama, Arugam Bay and Hikkaduwa, for every level.' },
+  { t: 'Snorkelling & diving', i: '\ud83e\udd3f', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB-o-HHlligUXdclvXuJw_WpGJelaXZzCuNAKFAr3JyRyAx-ILxj5_N8g&s=10', d: 'Coral reefs, shipwrecks and turtle bays, with certified instructors.' },
+  { t: 'Whale & dolphin watching', i: '\ud83d\udc0b', img: 'https://duqjpivknq39s.cloudfront.net/2019/03/800x750-46.jpg', d: 'Blue whale season boat trips from Mirissa and Trincomalee.' },
+  { t: 'Hot air ballooning', i: '\ud83c\udf88', img: 'https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/09/97/58/bf.jpg', d: 'Float over Sigiriya and Dambulla at sunrise, a quiet way to see the island.' },
   { t: 'Jet ski & water sports', i: '\ud83c\udf0a', img: 'images/tours/jet-ski.jpg', d: 'Jet skis, banana boats and parasailing on the west and south coasts.' }
 ];
 /* activities tiles are drawn by the sports script below (photo + title, details on click) */
