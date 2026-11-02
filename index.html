@@ -297,6 +297,14 @@ textarea { min-height: 110px; resize: vertical; }
 .site-footer h4 { color: #fff; font-size: 1.05rem; }
 .site-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; }
 .site-footer img { height: 70px; margin-bottom: 14px; }
+.site-footer .follow{margin-top:18px}
+.site-footer .follow strong{display:block;color:#fff;font-size:.95rem;margin-bottom:10px}
+.site-footer .follow .soc{display:flex;gap:10px}
+.site-footer .follow .soc a{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.1);transition:transform .2s,background .2s}
+.site-footer .follow .soc a:hover{transform:translateY(-2px);text-decoration:none}
+.site-footer .follow .soc a.ig:hover{background:linear-gradient(45deg,#f09433,#dc2743 55%,#bc1888)}
+.site-footer .follow .soc a.fb:hover{background:#1877f2}
+.site-footer .follow .soc svg{width:20px;height:20px;fill:#fff}
 .copy { margin-top: 44px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .12); font-size: .88rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 
 /* ---------- admin ---------- */
@@ -1013,7 +1021,7 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
 
 <footer class="site-footer"><div class="wrap">
   <div class="ft">
-    <div><img src="images/brand/logo-white.png" alt="Crystal Holidays"><p>Travel agent and tour operator in Sri Lanka. Tailor-made journeys, planned by a team with more than 30 years in the industry.</p></div>
+    <div><img src="images/brand/logo-white.png" alt="Crystal Holidays"><p>Travel agent and tour operator in Sri Lanka. Tailor-made journeys, planned by a team with more than 30 years in the industry.</p></p><div class="follow"><strong>Follow us for more details</strong><div class="soc"><a class="ig" href="https://www.instagram.com/crystal_holidays/" target="_blank" rel="noopener" aria-label="Crystal Holidays on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a><a class="fb" href="https://www.facebook.com/crystalholidays/" target="_blank" rel="noopener" aria-label="Crystal Holidays on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a></div></div></div>
     <div><h4>Explore</h4><ul><li><a href="#tours">Tours &amp; Packages</a></li><li><a href="#excursions">Excursions</a></li><li><a href="#activities">Activities</a></li><li><a href="#faq">FAQ</a></li><li class="pay-nav"><a href="#pay">Pay online</a></li><li><a href="#stay">Accommodation</a></li><li><a href="#maldives">Maldives</a></li><li><a href="#about">About us</a></li><li><a href="#rating">Tourist rating</a></li></ul></div>
     <div><h4>Contact</h4><ul><li>No. 25A, De Seram Road, Mount Lavinia, Sri Lanka</li><li><a href="tel:+94777356354">+94 77 735 6354</a></li><li>+94 11 272 5032 / 33</li></ul></div>
     <div><h4>Email</h4><ul><li><a href="mailto:crystalh@sltnet.lk">crystalh@sltnet.lk</a></li><li><a href="mailto:salescrystalh@sltnet.lk">salescrystalh@sltnet.lk</a></li><li><a href="mailto:crys.holiday@gmail.com">crys.holiday@gmail.com</a></li></ul></div>
@@ -2970,6 +2978,12 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
 @keyframes cwProg{to{transform:scaleX(1)}}
 .cw-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media print{.cw-walker{display:none}}
+/* calm mode: after a click the robot shows no weather until it is back home */
+.cw-walker.cw-calm .cw-wx{display:none}
+.cw-walker.cw-calm .cw-heat{display:none!important}
+.cw-walker.cw-calm .cw-rig{filter:none!important}
+.cw-walker.cw-calm:not(.is-walk) .cw-rig{animation:cwIdle 3.2s ease-in-out infinite}
+.cw-walker.cw-calm:not(.is-walk):not(.is-talk):not(.is-wave):not(.is-point) .cw-head{animation:cwLook 6.5s ease-in-out infinite}
 </style>
 
 <script>
@@ -3139,6 +3153,7 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
       if (document.hidden || chatOpen) return;
       await walkTo(maxX(), 120); if (my !== gen) return;
       wk.classList.add('is-home');
+      wk.classList.remove('cw-calm'); wxKick();
     }
     function quietly(ms) { clearTimeout(bubbleTimer); bubbleTimer = setTimeout(function () { hideBubble(); roam(); }, ms); }
 
@@ -3146,7 +3161,7 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
     async function askHelp() {
       cancelAll(); var my = ++gen;
       pose('wave');
-      await say('Do you need any help?', {
+      await say('Hi buddy, I am Crystal! 😊 How can I help you?', {
         type: true,
         buttons: [
           { l: 'Yes, please', c: 'btn small', f: openChat },
@@ -3268,7 +3283,7 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
       await say('Hello! Welcome to Crystal Holidays.', { type: true }); if (my !== gen) return;
       await sleep(1500); if (my !== gen) return;
       pose(null);
-      await say('Do you need any help?', {
+      await say('Hi buddy, I am Crystal! 😊 How can I help you?', {
         type: true,
         buttons: [
           { l: 'Yes, please', c: 'btn small', f: openChat },
@@ -3643,7 +3658,7 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
       }
     }
 
-    function hidden() { return document.hidden || wk.classList.contains('cw-away') || wk.classList.contains('cw-off'); }
+    function hidden() { return document.hidden || wk.classList.contains('cw-away') || wk.classList.contains('cw-off') || wk.classList.contains('cw-calm'); }
     function frame(t) {
       raf2 = 0;
       if (hidden()) return;
@@ -3689,7 +3704,7 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
     })();
 
     /* ---------- wiring ---------- */
-    bot.addEventListener('click', function () { if (touring) return; if (!greeted) wake(); else askHelp(); });
+    bot.addEventListener('click', function () { if (touring) return; wk.classList.add('cw-calm'); if (!greeted) wake(); else askHelp(); });
     addEventListener('resize', function () { x = wk.classList.contains('is-home') ? maxX() : Math.min(x, maxX()); setX(x); if (bub.classList.contains('on')) place(); });
     var panel = document.getElementById('aiPanel');
     if (panel) {
