@@ -1063,7 +1063,7 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
    - itinerary lines look like "Day 1: Arrive in Colombo"
    - published:false hides an item; featured is not used in this single page
    ===================================================================== */
-const SITE = { web3key: 'c1a337ac-e8d1-4841-a604-a72c09355552', whatsapp: '94777356354', email: 'crystalh@sltnet.lk', emailCopy: '', depositPercent: 30, brand: 'Crystal Holiday Web',
+const SITE = { cloudName: 'cuhli2ym', cloudPreset: 'payment_slips', web3key: 'c1a337ac-e8d1-4841-a604-a72c09355552', whatsapp: '94777356354', email: 'crystalh@sltnet.lk', emailCopy: '', depositPercent: 30, brand: 'Crystal Holiday Web',
   /* LANKAPAY / LANKAQR PAYMENTS: fill in your own details.
      qrImage: your LankaQR code picture (save it as images/brand/lankaqr.png) so guests can scan it with any Sri Lankan bank app or LankaPay app
      bank: your account details, shown under the QR for bank transfers
@@ -2558,28 +2558,43 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
   });
   const sendWithSlip = (files, who, em, amt, ref, txn, btn) => {
     const say = (cls, t) => { let b = f.querySelector('.msg'); if (!b) { b = document.createElement('div'); b.setAttribute('role', 'status'); f.append(b); } b.className = 'msg ' + cls; b.textContent = t; };
-    const msg = 'Payment notice\nPaid via: LankaPay / bank transfer\nAmount: ' + amt + '\nBooking: ' + ref + '\nTransaction no: ' + txn + '\nName: ' + who + '\nEmail: ' + em + '\nPayment slip attached: ' + files.map(x => x.name).join(', ');
-    const mailto = () => { location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent('Payment details - Crystal Holidays') + '&body=' + encodeURIComponent(msg + '\n(Please attach your bank slip)'); };
+    const base = 'Payment notice\nPaid via: LankaPay / bank transfer\nAmount: ' + amt + '\nBooking: ' + ref + '\nTransaction no: ' + txn + '\nName: ' + who + '\nEmail: ' + em;
+    const mailto = () => { location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent('Payment details - Crystal Holidays') + '&body=' + encodeURIComponent(base + '\n(Please attach your bank slip)'); };
     if (!SITE.web3key || /PASTE/.test(SITE.web3key)) { say('err', 'Online sending is not set up yet. Opening your email app. Please attach your slip there...'); setTimeout(mailto, 1200); return; }
-    const fd = new FormData();
-    fd.append('access_key', SITE.web3key); fd.append('subject', SITE.brand + ': Payment notice (LankaPay): ' + ref + ' - ' + who); fd.append('from_name', SITE.brand);
-    fd.append('name', who); fd.append('email', em); fd.append('message', msg); fd.append('botcheck', '');
-    files.forEach(x => fd.append('attachment', x, x.name));
     const label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending...';
-    say('ok', 'Sending your payment notice and slip... this can take up to a minute, please wait.');
-    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 60000);
-    fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { Accept: 'application/json' }, body: fd, signal: ctrl.signal })
-      .then(r => r.json().catch(() => ({ success: r.ok }))).then(r => {
-        if (!r.success) throw new Error(r.message || 'failed');
-        say('ok', 'Thank you ' + who + '! We have your payment notice and slip (ref ' + txn + '). We will check it and confirm to ' + em + ' soon.');
-        f.reset(); pfl.innerHTML = '';
-      }).catch(err => {
-        console.warn('Slip send failed:', err);
-        const m = String(err && err.message || err), slow = err && err.name === 'AbortError';
-        const why = location.protocol === 'file:' ? ' (This page was opened from a file on a computer. Online sending only works from the live website address.)' : slow ? ' (The email service is taking too long to answer.)' : m && m !== 'failed' && m !== 'Failed to fetch' ? ' (Reason: ' + m + ')' : '';
-        say('err', 'We could not send your slip from this page.' + why + ' Opening your email app with the details filled in. Please attach your slip there...');
-        setTimeout(mailto, why ? 6000 : 1500);
-      }).finally(() => { clearTimeout(timer); btn.disabled = false; btn.textContent = label; });
+    say('ok', 'Uploading your payment slip... please wait.');
+    const subject = SITE.brand + ': Payment notice (LankaPay): ' + ref + ' - ' + who;
+    /* Step 1: upload each slip to Cloudinary (unsigned preset, no secret in the browser) and get a link */
+    const uploadOne = x => {
+      if (!SITE.cloudName || !SITE.cloudPreset) return Promise.reject(new Error('Cloudinary is not set up'));
+      const fd = new FormData(); fd.append('file', x); fd.append('upload_preset', SITE.cloudPreset); fd.append('folder', 'payment-slips');
+      const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null, t = setTimeout(() => ctl && ctl.abort(), 60000);
+      return fetch('https://api.cloudinary.com/v1_1/' + SITE.cloudName + '/auto/upload', { method: 'POST', body: fd, signal: ctl ? ctl.signal : undefined })
+        .then(r => r.json().then(j => { if (!r.ok || !j.secure_url) throw new Error((j.error && j.error.message) || 'Upload failed'); return { name: x.name, url: j.secure_url }; }))
+        .finally(() => clearTimeout(t));
+    };
+    /* Step 2: email the notice (with the slip links) through Web3Forms */
+    const sendMail = (msg, subj) => fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: SITE.web3key, subject: subj, from_name: SITE.brand, name: who, email: em, message: msg, botcheck: '' }) })
+      .then(r => r.json().catch(() => ({ success: r.ok }))).then(r => { if (!(r.success === true || r.success === 'true')) throw new Error(r.message || 'failed'); });
+    const done = () => { say('ok', 'Thank you ' + who + '! We have your payment notice and slip (ref ' + txn + '). We will check it and confirm to ' + em + ' soon.'); f.reset(); pfl.innerHTML = ''; };
+    Promise.all(files.map(uploadOne))
+      .then(ups => sendMail(base + '\n[slip-upload-v2] Slip uploaded OK\n\nPayment slip(s):\n' + ups.map(u => u.name + ': ' + u.url).join('\n'), subject).then(done))
+      .catch(err => {
+        console.warn('Slip upload/send failed:', err);
+        /* fallback: send the notice without the slip and ask the guest to WhatsApp it */
+        const waUrl = 'https://wa.me/' + SITE.whatsapp + '?text=' + encodeURIComponent('Hello, I just sent a payment notice. Ref ' + txn + ', booking ' + ref + ', name ' + who + '. Here is my payment slip.');
+        const reason = String(err && err.message || err); const note = base + '\nPayment slip: NOT attached (customer was asked to WhatsApp it). File(s): ' + files.map(x => x.name).join(', ') + '\n[slip-upload-v2] Cloudinary error: ' + reason;
+        say('ok', 'Sending your payment notice...');
+        return sendMail(note, subject + ' [slip via WhatsApp]').then(() => {
+          const b = f.querySelector('.msg'); b.className = 'msg ok'; b.textContent = 'Thank you ' + who + '! We have your payment notice (ref ' + txn + '). Your slip could not be uploaded automatically, so please send it to us on WhatsApp using the button below. We will confirm to ' + em + ' soon. ';
+          const a = document.createElement('a'); a.className = 'btn dark'; a.target = '_blank'; a.rel = 'noopener'; a.href = waUrl; a.textContent = 'Send my slip on WhatsApp'; b.append(document.createElement('br'), a);
+          f.reset(); pfl.innerHTML = '';
+        }).catch(err2 => {
+          console.warn('Text notice failed:', err2);
+          say('err', 'We could not send from this page. Opening your email app with the details filled in. Please attach your slip there...');
+          setTimeout(mailto, 1500);
+        });
+      }).finally(() => { btn.disabled = false; btn.textContent = label; });
   };
   document.getElementById('p_send').onclick = e => {
     if (!f.reportValidity()) return;
