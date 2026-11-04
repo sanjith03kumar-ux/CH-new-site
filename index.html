@@ -925,7 +925,7 @@ html:not(.pay-on) #pay,html:not(.pay-on) .pay-nav,html:not(.bank-on) .lp-pay{dis
   <div class="sp-golf sp-compact">
     <div class="sp-pic" id="spGolfPic" role="button" tabindex="0" data-sp="golf" aria-label="Golf: see courses and details">
       <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="spSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fd3ea"/><stop offset="1" stop-color="#e9f7fb"/></linearGradient></defs><rect width="800" height="600" fill="url(#spSky)"/><circle cx="620" cy="140" r="52" fill="#d8a235" opacity=".9"/><path d="M0 330 Q140 250 300 320 T620 300 T800 330 V600 H0Z" fill="#1e5a43"/><path d="M0 400 Q200 330 420 390 T800 380 V600 H0Z" fill="#2f7a58"/><path d="M0 470 Q260 410 520 470 T800 450 V600 H0Z" fill="#4e9a6e"/><ellipse cx="520" cy="500" rx="150" ry="28" fill="#6bb585"/><rect x="515" y="380" width="4" height="120" fill="#0a2540"/><path d="M519 382 L580 400 L519 418Z" fill="#ff9f1c"/><circle cx="470" cy="506" r="7" fill="#fff"/><ellipse cx="520" cy="502" rx="9" ry="3" fill="#0a2540" opacity=".7"/></svg>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCOgfrasup_ar_FOTXFxRpFl4d7KIn0xs8i51av9xAUg&amp;s=10" alt="Golf course" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='images/activities/golf.jpg'}else{this.remove()}">
+      <img src="https://www.performancegolf.com/wp-content/uploads/2025/04/golf-swing-setup-featured.webp" alt="Golf swing setup on a golf course" referrerpolicy="no-referrer" onerror="if(!this.dataset.f){this.dataset.f=1;this.src='images/activities/golf.jpg'}else{this.remove()}">
       <span class="sp-badge">Golf</span>
     </div>
     <div class="sp-info">
@@ -2502,7 +2502,7 @@ function openInfo(title, cover, body, ask) {
   $('#dbody').innerHTML = `<div class="cover" style="${bg}"></div><div class="in" style="grid-template-columns:1fr"><div><h2>${esc(title)}</h2>${body}<p style="margin-top:22px"><a class="btn" href="#contact" data-ask="${esc(ask || title)}">Enquire about ${esc(title)}</a></p></div></div>`;
   dlg.classList.add('on'); dlg.scrollTop = 0;
 }
-const openGolf = () => openInfo('Play golf in Sri Lanka', 'linear-gradient(135deg,#1e5a43,#0f8f9b)',
+const openGolf = () => openInfo('Play golf in Sri Lanka', 'https://www.performancegolf.com/wp-content/uploads/2025/04/golf-swing-setup-featured.webp',
   `<p>The island has a long golfing tradition, from colonial-era clubs to a modern resort course. Mix a round or two with temples, tea country and the coast.</p><h3>Courses we can arrange</h3><ul class="sp-courses">${GOLF.courses.map(c => `<li><b>${esc(c[0])}</b><em>${esc(c[1])}</em><span>${esc(c[2])}</span></li>`).join('')}</ul><h3>What we arrange</h3><ul class="sp-arrange">${GOLF.arrange.map(x => `<li>${esc(x)}</li>`).join('')}</ul><p class="sp-note"><b>Good to know:</b> ${esc(GOLF.note)}</p>`, 'Golf');
 const openSport = i => { const s = SPORTS[i]; openInfo(s.t, s.img, `<p>${esc(s.d)}</p><ul class="sp-facts">${s.f.map(x => `<li><b>${esc(x[0])}</b><span>${esc(x[1])}</span></li>`).join('')}</ul>`, s.t); };
 const openAct = i => { const a = ACTIVITIES[i]; openInfo(a.t, a.img, `<p>${esc(a.d)}</p><p class="muted">${esc(ACT_MORE[i] || '')}</p>`, a.t); };
@@ -2544,83 +2544,6 @@ dlg.addEventListener('click', e => { if (e.target.closest('[data-ask]')) closeDl
   try { sessionStorage.removeItem('payOn'); sessionStorage.removeItem('bankOn'); } catch (e) {}
   window.PAYUI = { pay() { R.classList.add('pay-on'); }, bank() { R.classList.add('pay-on', 'bank-on'); } };
   document.addEventListener('click', e => { const a = e.target.closest('[data-payref]'); if (a) setTimeout(() => { f.p_ref.value = a.dataset.payref; document.getElementById('dlg').classList.remove('on'); }, 50); });
-  /* payment slip upload: image / PDF files are emailed to the office together with the payment notice */
-  const pf = f.p_file, pfl = document.getElementById('p_files'), MAXF = 3, MAXB = 5 * 1024 * 1024;
-  const okType = x => /^image\//.test(x.type) || x.type === 'application/pdf' || /\.(pdf|jpe?g|png|gif|webp|heic|heif)$/i.test(x.name);
-  const esc2 = t => String(t).replace(/[<>&"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]));
-  pf.addEventListener('change', () => {
-    let fl = Array.from(pf.files || []), bad = '';
-    if (fl.length > MAXF) { bad = 'Please choose up to ' + MAXF + ' files.'; }
-    else if (fl.some(x => !okType(x))) { bad = 'Please choose an image or a PDF file.'; }
-    else if (fl.some(x => x.size > MAXB)) { bad = 'Each file must be 5 MB or smaller.'; }
-    if (bad) { pf.value = ''; pfl.innerHTML = '<span class="bad">' + bad + '</span>'; return; }
-    pfl.innerHTML = fl.map(x => esc2(x.name) + ' (' + Math.max(1, Math.round(x.size / 1024)) + ' KB)').join('<br>');
-  });
-  const sendWithSlip = (files, who, em, amt, ref, txn, btn) => {
-    const say = (cls, t) => { let b = f.querySelector('.msg'); if (!b) { b = document.createElement('div'); b.setAttribute('role', 'status'); f.append(b); } b.className = 'msg ' + cls; b.textContent = t; };
-<<<<<<< HEAD
-    const base = 'Payment notice\nPaid via: LankaPay / bank transfer\nAmount: ' + amt + '\nBooking: ' + ref + '\nTransaction no: ' + txn + '\nName: ' + who + '\nEmail: ' + em;
-    const mailto = () => { location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent('Payment details - Crystal Holidays') + '&body=' + encodeURIComponent(base + '\n(Please attach your bank slip)'); };
-    if (!SITE.web3key || /PASTE/.test(SITE.web3key)) { say('err', 'Online sending is not set up yet. Opening your email app. Please attach your slip there...'); setTimeout(mailto, 1200); return; }
-    const label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending...';
-    say('ok', 'Uploading your payment slip... please wait.');
-    const subject = SITE.brand + ': Payment notice (LankaPay): ' + ref + ' - ' + who;
-    /* Step 1: upload each slip to Cloudinary (unsigned preset, no secret in the browser) and get a link */
-    const uploadOne = x => {
-      if (!SITE.cloudName || !SITE.cloudPreset) return Promise.reject(new Error('Cloudinary is not set up'));
-      const fd = new FormData(); fd.append('file', x); fd.append('upload_preset', SITE.cloudPreset); fd.append('folder', 'payment-slips');
-      const ctl = typeof AbortController !== 'undefined' ? new AbortController() : null, t = setTimeout(() => ctl && ctl.abort(), 60000);
-      return fetch('https://api.cloudinary.com/v1_1/' + SITE.cloudName + '/auto/upload', { method: 'POST', body: fd, signal: ctl ? ctl.signal : undefined })
-        .then(r => r.json().then(j => { if (!r.ok || !j.secure_url) throw new Error((j.error && j.error.message) || 'Upload failed'); return { name: x.name, url: j.secure_url }; }))
-        .finally(() => clearTimeout(t));
-    };
-    /* Step 2: email the notice (with the slip links) through Web3Forms */
-    const sendMail = (msg, subj) => fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify({ access_key: SITE.web3key, subject: subj, from_name: SITE.brand, name: who, email: em, message: msg, botcheck: '' }) })
-      .then(r => r.json().catch(() => ({ success: r.ok }))).then(r => { if (!(r.success === true || r.success === 'true')) throw new Error(r.message || 'failed'); });
-    const done = () => { say('ok', 'Thank you ' + who + '! We have your payment notice and slip (ref ' + txn + '). We will check it and confirm to ' + em + ' soon.'); f.reset(); pfl.innerHTML = ''; };
-    Promise.all(files.map(uploadOne))
-      .then(ups => sendMail(base + '\n[slip-upload-v2] Slip uploaded OK\n\nPayment slip(s):\n' + ups.map(u => u.name + ': ' + u.url).join('\n'), subject).then(done))
-      .catch(err => {
-        console.warn('Slip upload/send failed:', err);
-        /* fallback: send the notice without the slip and ask the guest to WhatsApp it */
-        const waUrl = 'https://wa.me/' + SITE.whatsapp + '?text=' + encodeURIComponent('Hello, I just sent a payment notice. Ref ' + txn + ', booking ' + ref + ', name ' + who + '. Here is my payment slip.');
-        const reason = String(err && err.message || err); const note = base + '\nPayment slip: NOT attached (customer was asked to WhatsApp it). File(s): ' + files.map(x => x.name).join(', ') + '\n[slip-upload-v2] Cloudinary error: ' + reason;
-        say('ok', 'Sending your payment notice...');
-        return sendMail(note, subject + ' [slip via WhatsApp]').then(() => {
-          const b = f.querySelector('.msg'); b.className = 'msg ok'; b.textContent = 'Thank you ' + who + '! We have your payment notice (ref ' + txn + '). Your slip could not be uploaded automatically, so please send it to us on WhatsApp using the button below. We will confirm to ' + em + ' soon. ';
-          const a = document.createElement('a'); a.className = 'btn dark'; a.target = '_blank'; a.rel = 'noopener'; a.href = waUrl; a.textContent = 'Send my slip on WhatsApp'; b.append(document.createElement('br'), a);
-          f.reset(); pfl.innerHTML = '';
-        }).catch(err2 => {
-          console.warn('Text notice failed:', err2);
-          say('err', 'We could not send from this page. Opening your email app with the details filled in. Please attach your slip there...');
-          setTimeout(mailto, 1500);
-        });
-      }).finally(() => { btn.disabled = false; btn.textContent = label; });
-=======
-    const msg = 'Payment notice\nPaid via: LankaPay / bank transfer\nAmount: ' + amt + '\nBooking: ' + ref + '\nTransaction no: ' + txn + '\nName: ' + who + '\nEmail: ' + em + '\nPayment slip attached: ' + files.map(x => x.name).join(', ');
-    const mailto = () => { location.href = 'mailto:' + SITE.email + '?subject=' + encodeURIComponent('Payment details - Crystal Holidays') + '&body=' + encodeURIComponent(msg + '\n(Please attach your bank slip)'); };
-    if (!SITE.web3key || /PASTE/.test(SITE.web3key)) { say('err', 'Online sending is not set up yet. Opening your email app. Please attach your slip there...'); setTimeout(mailto, 1200); return; }
-    const fd = new FormData();
-    fd.append('access_key', SITE.web3key); fd.append('subject', SITE.brand + ': Payment notice (LankaPay): ' + ref + ' - ' + who); fd.append('from_name', SITE.brand);
-    fd.append('name', who); fd.append('email', em); fd.append('message', msg); fd.append('botcheck', '');
-    files.forEach(x => fd.append('attachment', x, x.name));
-    const label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending...';
-    say('ok', 'Sending your payment notice and slip... this can take up to a minute, please wait.');
-    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 60000);
-    fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { Accept: 'application/json' }, body: fd, signal: ctrl.signal })
-      .then(r => r.json().catch(() => ({ success: r.ok }))).then(r => {
-        if (!r.success) throw new Error(r.message || 'failed');
-        say('ok', 'Thank you ' + who + '! We have your payment notice and slip (ref ' + txn + '). We will check it and confirm to ' + em + ' soon.');
-        f.reset(); pfl.innerHTML = '';
-      }).catch(err => {
-        console.warn('Slip send failed:', err);
-        const m = String(err && err.message || err), slow = err && err.name === 'AbortError';
-        const why = location.protocol === 'file:' ? ' (This page was opened from a file on a computer. Online sending only works from the live website address.)' : slow ? ' (The email service is taking too long to answer.)' : m && m !== 'failed' && m !== 'Failed to fetch' ? ' (Reason: ' + m + ')' : '';
-        say('err', 'We could not send your slip from this page.' + why + ' Opening your email app with the details filled in. Please attach your slip there...');
-        setTimeout(mailto, why ? 6000 : 1500);
-      }).finally(() => { clearTimeout(timer); btn.disabled = false; btn.textContent = label; });
->>>>>>> 913452bb134f8ddddef76917b23cb1fc3c664a58
-  };
   document.getElementById('p_send').onclick = e => {
     if (!f.reportValidity()) return;
     const who = f.p_name.value, em = f.p_email.value, amt = f.p_amt.value + ' ' + cur, ref = f.p_ref.value, txn = f.p_txn.value;
